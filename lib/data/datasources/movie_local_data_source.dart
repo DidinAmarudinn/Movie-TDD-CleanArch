@@ -7,12 +7,15 @@ abstract class MovieLocalDataSource {
   Future<String> removeWatchlist(MovieTable movie);
   Future<MovieTable?> getMovieById(int id);
   Future<List<MovieTable>> getWatchlistMovies();
+  Future<void> cacheNowPlayingMovies(List<MovieTable> movies);
+  Future<List<MovieTable>> getCachedNowPlayingMovies();
 }
 
 class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   final DatabaseHelper databaseHelper;
 
   MovieLocalDataSourceImpl({required this.databaseHelper});
+  
 
   @override
   Future<String> insertWatchlist(MovieTable movie) async {
@@ -48,5 +51,16 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   Future<List<MovieTable>> getWatchlistMovies() async {
     final result = await databaseHelper.getWatchlistMovies();
     return result.map((data) => MovieTable.fromMap(data)).toList();
+  }
+
+  @override
+  Future<void> cacheNowPlayingMovies(List<MovieTable> movies) async{
+ 
+  }
+
+  @override
+  Future<List<MovieTable>> getCachedNowPlayingMovies() async{
+    // TODO: implement getCachedNowPlayingMovies
+    throw UnimplementedError();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable {
@@ -19,4 +20,8 @@ class ConnectionFailure extends Failure {
 
 class DatabaseFailure extends Failure {
   DatabaseFailure(String message) : super(message);
+}
+
+class CacheFailure extends Failure{
+  CacheFailure(String message): super(message);
 }
