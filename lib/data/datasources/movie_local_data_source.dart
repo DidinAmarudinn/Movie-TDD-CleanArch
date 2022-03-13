@@ -15,7 +15,6 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   final DatabaseHelper databaseHelper;
 
   MovieLocalDataSourceImpl({required this.databaseHelper});
-  
 
   @override
   Future<String> insertWatchlist(MovieTable movie) async {
@@ -54,13 +53,18 @@ class MovieLocalDataSourceImpl implements MovieLocalDataSource {
   }
 
   @override
-  Future<void> cacheNowPlayingMovies(List<MovieTable> movies) async{
- 
+  Future<void> cacheNowPlayingMovies(List<MovieTable> movies) async {
+    await databaseHelper.clearCache('now playing');
+    await databaseHelper.insertCacheTransaction(movies, 'now playing');
   }
 
   @override
-  Future<List<MovieTable>> getCachedNowPlayingMovies() async{
-    // TODO: implement getCachedNowPlayingMovies
-    throw UnimplementedError();
+  Future<List<MovieTable>> getCachedNowPlayingMovies() async {
+    final result = await databaseHelper.getCacheMovies('now playing');
+    if (result.length > 0) {
+      return result.map((movie) => MovieTable.fromMap(movie)).toList();
+    } else {
+      throw CacheException("Can't get the data :( ");
+    }
   }
 }

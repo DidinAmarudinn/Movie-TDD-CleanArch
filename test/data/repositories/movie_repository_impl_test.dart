@@ -64,13 +64,6 @@ void main() {
     voteAverage: 7.2,
     voteCount: 13507,
   );
-  final testMovieCache = MovieTable(
-    id: 557,
-    overview:
-        "After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.",
-    posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
-    title: "Spider-Man",
-  );
 
   final tMovieModelList = <MovieModel>[tMovieModel];
   final tMovieList = <Movie>[tMovie];
@@ -145,7 +138,8 @@ void main() {
         'should return cached data when device is offline',
         () async {
           // arrange
-          when(mockLocalDataSource.getCachedNowPlayingMovies()).thenAnswer((_)async => [testMovieCache]);
+          when(mockLocalDataSource.getCachedNowPlayingMovies())
+              .thenAnswer((_) async => [testMovieCache]);
           // act
           final result = await repository.getNowPlayingMovies();
           // assert
@@ -154,12 +148,13 @@ void main() {
           expect(resultList, [testMovieFromCache]);
         },
       );
-      
+
       test(
         'should return CacheFailure when app has no cache',
         () async {
           // arrange
-          when(mockLocalDataSource.getCachedNowPlayingMovies()).thenThrow(CacheException('No Cache'));
+          when(mockLocalDataSource.getCachedNowPlayingMovies())
+              .thenThrow(CacheException('No Cache'));
           // act
           final result = await repository.getNowPlayingMovies();
           // assert
@@ -171,7 +166,25 @@ void main() {
   });
 
   group('Popular Movies', () {
-    test('should return movie list when call to data source is success',
+    test(
+      'should check if device is online',
+      () async {
+        // arrange
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.getPopularMovies())
+            .thenAnswer((_) async => []);
+        // act
+        await repository.getPopularMovies();
+        // assert
+        verify(mockNetworkInfo.isConnected);
+      },
+    );
+
+   group("when device is online", (){
+     setUp((){
+       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+     });
+      test('should return movie list when call to data source is success',
         () async {
       // arrange
       when(mockRemoteDataSource.getPopularMovies())
@@ -195,8 +208,13 @@ void main() {
       // assert
       expect(result, Left(ServerFailure('')));
     });
+   });
 
-    test(
+    group("when device is offline", (){
+      setUp((){
+        when(mockNetworkInfo.isConnected).thenAnswer((_) async=> false);
+      });
+       test(
         'should return connection failure when device is not connected to the internet',
         () async {
       // arrange
@@ -208,6 +226,8 @@ void main() {
       expect(
           result, Left(ConnectionFailure('Failed to connect to the network')));
     });
+    });
+   
   });
 
   group('Top Rated Movies', () {
