@@ -1,4 +1,5 @@
 import 'package:ditonton/common/exception.dart';
+import 'package:ditonton/common/failure.dart';
 import 'package:ditonton/data/datasources/movie_local_data_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -137,5 +138,76 @@ void main() {
         expect(()=> call, throwsA(isA<CacheException>()));
       },
     );
+  });
+
+  group("cache popular movies", (){
+   
+    test(
+      'should call database helper to save data',
+      () async {
+        // arrange
+        when(mockDatabaseHelper.clearCache('popular')).thenAnswer((_) async => 1);
+        // act
+        await dataSource.cachePopularMovies([testMovieCache]);
+        // assert
+        verify(mockDatabaseHelper.clearCache('popular'));
+        verify(mockDatabaseHelper.insertCacheTransaction([testMovieCache], 'popular'));
+      },
+    );
+    test(
+      'should return list of movies form db when data is exist',
+      () async {
+        // arrange
+        when(mockDatabaseHelper.getCacheMovies('popular')).thenAnswer((_) async => [testMovieCacheMap]);
+        // act
+        final result = await dataSource.getCachedPopularMovies();
+        // assert
+        expect(result, [testMovieCache]);
+      },
+    );
+    test(
+      'should throw CacheException when cache data is not exist',
+      () async {
+        // arrange
+        when(mockDatabaseHelper.getCacheMovies('popular')).thenAnswer((_) async => []);
+        // act
+        final call = dataSource.getCachedPopularMovies();
+        // assert
+        expect(()=> call, throwsA(isA<CacheException>()));
+      },
+    );
+  });
+
+  group("cache top rated movies", (){
+    test("should call database helper to save data", ()async {
+      when(mockDatabaseHelper.clearCache('top rated')).thenAnswer((_) async => 1);
+      // act
+      await dataSource.cacheTopRatedMovies([testMovieCache]);
+      verify(mockDatabaseHelper.clearCache('top rated'));
+      verify(mockDatabaseHelper.insertCacheTransaction([testMovieCache], 'top rated'));
+    });
+
+  test(
+    'should return list of movies from db when data exist',
+    () async {
+      // arrange
+      when(mockDatabaseHelper.getCacheMovies('top rated')).thenAnswer((_)async => [testMovieCacheMap]);
+      // act
+      final result = await dataSource.getCachedTopRatedMovies();
+      // assert
+      expect(result, [testMovieCache]);
+    },
+  );
+  test(
+    'should throw CacheException when cache data is not exist',
+    () async {
+      // arrange
+      when(mockDatabaseHelper.getCacheMovies('top rated')).thenAnswer((_)async => []);
+      // act
+      final call =  dataSource.getCachedTopRatedMovies();
+      // assert
+      expect(()=> call, throwsA(isA<CacheException>()));
+    },
+  );
   });
 }

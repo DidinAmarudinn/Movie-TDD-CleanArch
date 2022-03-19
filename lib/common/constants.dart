@@ -11,6 +11,7 @@ const Color kMikadoYellow = Color(0xFFffc300);
 const Color kDavysGrey = Color(0xFF4B5358);
 const Color kGrey = Color(0xFF303030);
 
+
 // text style
 final TextStyle kHeading5 =
     GoogleFonts.poppins(fontSize: 23, fontWeight: FontWeight.w400);
@@ -44,3 +45,6 @@ const kColorScheme = ColorScheme(
   onError: Colors.white,
   brightness: Brightness.dark,
 );
+
+//padding
+const double kDefaultPadding = 24;

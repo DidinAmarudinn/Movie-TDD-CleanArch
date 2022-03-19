@@ -59,8 +59,9 @@ class DatabaseHelper {
       for (final movie in movies) {
         final movieJson = movie.toJson();
         movieJson['category'] = category;
-        txn.insert(_tblCache, movieJson);
+        txn.insert(_tblCache, movieJson, conflictAlgorithm: ConflictAlgorithm.replace);
       }
+      
     });
   }
 
