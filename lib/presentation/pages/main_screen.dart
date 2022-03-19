@@ -71,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, SearchPage.ROUTE_NAME);
+              Navigator.pushNamed(context, SearchPage.ROUTE_NAME, arguments: selectedIndex == 0? true: false);
             },
             icon: Icon(Icons.search),
           )

@@ -25,7 +25,7 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
 
   @override
   Future<Either<Failure, List<TvSeries>>> getPopularTvSeries() async {
-      try {
+    try {
       final result = await remoteDataSource.getPopularTvSeries();
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
@@ -37,13 +37,25 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
 
   @override
   Future<Either<Failure, List<TvSeries>>> getTopRatedTvSeries() async {
-      try {
+    try {
       final result = await remoteDataSource.getTopRatedTvSeries();
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(""));
     } on SocketException {
       return Left(ConnectionFailure("failed connect to the network"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TvSeries>>> searhcTvSeries(String query) async {
+    try {
+      final result = await remoteDataSource.searchTvSerie(query);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('failed connect to the network'));
     }
   }
 }
