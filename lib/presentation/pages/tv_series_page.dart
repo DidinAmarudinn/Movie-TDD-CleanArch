@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/domain/entities/tv_series.dart';
 import 'package:ditonton/presentation/pages/popular_tv_serires_page.dart';
+import 'package:ditonton/presentation/pages/top_rated_tv_series_page.dart';
 import 'package:ditonton/presentation/provider/tv_series_list_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -75,10 +76,11 @@ class _TvSeriesPageState extends State<TvSeriesPage>
                 return Text('Failed');
               }
             }),
-              Text(
-              'Top Rated',
-              style: kHeading6,
-            ),
+             BuildHeading(
+                title: 'Top Rated',
+                onTap: () =>
+                    Navigator.pushNamed(context, TopRatedTvSeriesPage.ROUTE_NAME),
+              ),
             Consumer<TvSeriesListNotifier>(builder: (context, data, child) {
               final state = data.topRatedState;
               if (state == RequestState.Loading) {

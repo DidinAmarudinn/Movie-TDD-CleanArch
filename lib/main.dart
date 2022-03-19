@@ -8,6 +8,7 @@ import 'package:ditonton/presentation/pages/popular_movies_page.dart';
 import 'package:ditonton/presentation/pages/popular_tv_serires_page.dart';
 import 'package:ditonton/presentation/pages/search_page.dart';
 import 'package:ditonton/presentation/pages/top_rated_movies_page.dart';
+import 'package:ditonton/presentation/pages/top_rated_tv_series_page.dart';
 import 'package:ditonton/presentation/pages/tv_series_page.dart';
 import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:ditonton/presentation/provider/movie_detail_notifier.dart';
@@ -16,6 +17,7 @@ import 'package:ditonton/presentation/provider/movie_search_notifier.dart';
 import 'package:ditonton/presentation/provider/popular_movies_notifier.dart';
 import 'package:ditonton/presentation/provider/popular_tv_series.dart';
 import 'package:ditonton/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:ditonton/presentation/provider/top_rated_tv_series_notifier.dart';
 import 'package:ditonton/presentation/provider/tv_series_list_notifier.dart';
 import 'package:ditonton/presentation/provider/watchlist_movie_notifier.dart';
 import 'package:ditonton/presentation/widgets/custom_drawer.dart';
@@ -57,7 +59,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<PopularTvSeriesNotifier>(),
-        )
+        ),
+        ChangeNotifierProvider(create: (_)=> di.locator<TopRatedTvSeriesNotifier>())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -97,6 +100,8 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => TvSeriesPage());
             case PopularTvSeriesPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => PopularTvSeriesPage());
+              case TopRatedTvSeriesPage.ROUTE_NAME:
+              return MaterialPageRoute(builder: (_) => TopRatedTvSeriesPage());
             default:
               return MaterialPageRoute(builder: (_) {
                 return Scaffold(
