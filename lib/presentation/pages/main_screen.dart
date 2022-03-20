@@ -114,6 +114,7 @@ class _MainScreenState extends State<MainScreen> {
           Expanded(
               child: PageView(
             controller: pageController,
+            physics: NeverScrollableScrollPhysics(),
             children: [HomeMoviePage(), TvSeriesPage()],
           ))
         ],
