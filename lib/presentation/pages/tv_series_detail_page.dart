@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ditonton/common/constants.dart';
 import 'package:ditonton/domain/entities/genre.dart';
 import 'package:ditonton/common/state_enum.dart';
+import 'package:ditonton/domain/entities/tv_series.dart';
 import 'package:ditonton/presentation/provider/tv_series_detail_notifier.dart';
+import 'package:ditonton/presentation/widgets/season_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -39,10 +41,9 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
             );
           } else if (provider.state == RequestState.Loaded) {
             final tvSeries = provider.seriesDetail;
+            final recommendations = provider.listRecomendations;
             return SafeArea(
-              child: DetailContent(
-                tvSeries
-              ),
+              child: DetailContent(tvSeries,recommendations),
             );
           } else {
             return Text(provider.message);
@@ -55,8 +56,8 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
 
 class DetailContent extends StatelessWidget {
   final TvSeriesDetail tvSeries;
-
-  DetailContent(this.tvSeries);
+  final List<TvSeries> recommendations;
+  DetailContent(this.tvSeries, this.recommendations);
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +100,7 @@ class DetailContent extends StatelessWidget {
                               style: kHeading5,
                             ),
                             ElevatedButton(
-                              onPressed: () async {
-                                
-                                
-                              },
+                              onPressed: () async {},
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -139,10 +137,76 @@ class DetailContent extends StatelessWidget {
                             ),
                             SizedBox(height: 16),
                             Text(
+                              'Season',
+                              style: kHeading6,
+                            ),
+                            SizedBox(height: 16,),
+                              Column(
+                              children: tvSeries.seasons.map((season) {
+                                return SeasonCardList(season: season);
+                              }).toList(),
+                            ),
+                             SizedBox(height: 16),
+                            Text(
                               'Recommendations',
                               style: kHeading6,
                             ),
-                          
+                            Consumer<TvSeriesDetailNotifier>(
+                              builder: (context, data, child) {
+                                if (data.stateRecomendation ==
+                                    RequestState.Loading) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else if (data.stateRecomendation ==
+                                    RequestState.Error) {
+                                  return Text(data.message);
+                                } else if (data.stateRecomendation ==
+                                    RequestState.Loaded) {
+                                  return Container(
+                                    height: 150,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        final tvSeries = recommendations[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.pushReplacementNamed(
+                                                context,
+                                                TvSeriesDetailPage.ROUTE_NAME,
+                                                arguments: tvSeries.id,
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    'https://image.tmdb.org/t/p/w500${tvSeries.posterPath}',
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      itemCount: recommendations.length,
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -193,6 +257,4 @@ class DetailContent extends StatelessWidget {
 
     return result.substring(0, result.length - 2);
   }
-
-  
 }

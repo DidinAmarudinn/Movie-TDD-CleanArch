@@ -71,4 +71,17 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ConnectionFailure('failed connect to network'));
     }
   }
+
+  @override
+  Future<Either<Failure, List<TvSeries>>> getTvSeriesRecomendations(
+      int id) async {
+    try {
+      final result = await remoteDataSource.getTvSeriesRecomendation(id);
+      return Right(result.map((model) => model.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure(""));
+    }
+  }
 }
