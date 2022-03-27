@@ -1,0 +1,46 @@
+{
+    "adult": false,
+    "backdrop_path": "backdropPath",
+    "episode_run_time": [
+        1,2
+    ],
+    "first_air_date": "firstAirDate",
+    "genres": [
+        {
+            "id": 1,
+            "name": "Action"
+        }
+    ],
+    "homepage": "homepage",
+    "id": 2,
+    "in_production": false,
+    "languages": [
+        "en"
+    ],
+    "last_air_date": "lastAirDate",
+    "name": "name",
+    "number_of_episodes": 2,
+    "number_of_seasons": 2,
+    "original_language": "originalLanguage",
+    "original_name": "originalName",
+    "overview": "overview",
+    "popularity": 9.0,
+    "poster_path": "posterPath",
+    "seasons": [
+        {
+            "air_date": "airDate",
+            "episode_count": 1,
+            "id": 1,
+            "name": "name",
+            "overview": "overview",
+            "poster_path": "posterPath",
+            "season_number": 1
+        }
+    ],
+   
+    "status": "status",
+    "tagline": "tagline",
+    "type": "type",
+    "vote_average": 2,
+    "vote_count": 200
+}

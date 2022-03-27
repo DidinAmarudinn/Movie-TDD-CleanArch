@@ -1,7 +1,11 @@
 import 'package:ditonton/data/models/movie_table.dart';
+import 'package:ditonton/data/models/tv_series_table.dart';
 import 'package:ditonton/domain/entities/genre.dart';
 import 'package:ditonton/domain/entities/movie.dart';
 import 'package:ditonton/domain/entities/movie_detail.dart';
+import 'package:ditonton/domain/entities/season.dart';
+import 'package:ditonton/domain/entities/tv_series.dart';
+import 'package:ditonton/domain/entities/tv_series_detail.dart';
 
 final testMovie = Movie(
   adult: false,
@@ -29,13 +33,12 @@ final testMovieCacheMap = {
 };
 
 final testMovieCache = MovieTable(
-    id: 557,
-    overview:
-        "After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.",
-    posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
-    title: "Spider-Man",
-  );
-
+  id: 557,
+  overview:
+      "After being bitten by a genetically altered spider, nerdy high school student Peter Parker is endowed with amazing powers to become the Amazing superhero known as Spider-Man.",
+  posterPath: '/rweIrveL43TaxUN0akQEaAXL6x0.jpg',
+  title: "Spider-Man",
+);
 
 final testMovieList = [testMovie];
 
@@ -54,12 +57,56 @@ final testMovieDetail = MovieDetail(
   voteCount: 1,
 );
 
+final testTvSeriesDetail = TvSeriesDetail(
+  adult: false,
+  backdropPath: 'backdropPath',
+  episodeRunTime: [1, 2],
+  firstAirDate: 'firstAirDate',
+  genres: [Genre(id: 1, name: 'Action')],
+  homepage: "homepage",
+  id: 2,
+  inProduction: false,
+  languages: ["en"],
+  lastAirDate: "lastAirDate",
+  name: "name",
+  numberOfEpisodes: 2,
+  numberOfSeasons: 2,
+  originalLanguage: "originalLanguage",
+  originalName: "originalName",
+  overview: "overview",
+  popularity: 9.0,
+  posterPath: "posterPath",
+  seasons: [
+    Season(
+        airDate: "airDate",
+        episodeCount: 1,
+        id: 1,
+        name: "name",
+        overview: "overview",
+        posterPath: "posterPath",
+        seasonNumber: 1)
+  ],
+  status: "status",
+  tagline: "tagline",
+  type: "type",
+  voteAverage: 2,
+  voteCount: 200,
+);
+
 final testWatchlistMovie = Movie.watchlist(
   id: 1,
   title: 'title',
   posterPath: 'posterPath',
   overview: 'overview',
 );
+
+final testWatchlistTvSeries = TvSeries.watchlist(
+  id: 1,
+  overview: "overview",
+  posterPath: "posterPath",
+  name: "name",
+);
+
 final testMovieFromCache = Movie.watchlist(
   id: 557,
   overview:
@@ -81,3 +128,46 @@ final testMovieMap = {
   'posterPath': 'posterPath',
   'title': 'title',
 };
+
+final testTvSeriesTable = TvSeriesTable(
+  id: 1,
+  name: "name",
+  posterPath: "posterPath",
+  overview: "overview",
+);
+
+final testTvSeriesDetail2 = TvSeriesDetail(
+  adult: false,
+  backdropPath: 'backdropPath',
+  episodeRunTime: [1, 2],
+  firstAirDate: 'firstAirDate',
+  genres: [Genre(id: 1, name: 'Action')],
+  homepage: "homepage",
+  id: 1,
+  inProduction: false,
+  languages: ["en"],
+  lastAirDate: "lastAirDate",
+  name: "name",
+  numberOfEpisodes: 2,
+  numberOfSeasons: 2,
+  originalLanguage: "originalLanguage",
+  originalName: "originalName",
+  overview: "overview",
+  popularity: 9.0,
+  posterPath: "posterPath",
+  seasons: [
+    Season(
+        airDate: "airDate",
+        episodeCount: 1,
+        id: 1,
+        name: "name",
+        overview: "overview",
+        posterPath: "posterPath",
+        seasonNumber: 1)
+  ],
+  status: "status",
+  tagline: "tagline",
+  type: "type",
+  voteAverage: 2,
+  voteCount: 200,
+);

@@ -5,7 +5,7 @@ class TvSeriesModel extends Equatable {
   final String? backdropPath;
   final String? firstAirDate;
   final List<int> genreIds;
-  final int? id;
+  final int id;
   final String? name;
   final List<String> originCountry;
   final String? originalLanguage;

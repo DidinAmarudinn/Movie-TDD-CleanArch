@@ -27,6 +27,8 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
     Future.microtask(() {
       Provider.of<TvSeriesDetailNotifier>(context, listen: false)
           .fetchTvSeriesDetail(widget.id);
+      Provider.of<TvSeriesDetailNotifier>(context, listen: false)
+          .loadWatchlistStatus(widget.id);
     });
   }
 
@@ -42,8 +44,10 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
           } else if (provider.state == RequestState.Loaded) {
             final tvSeries = provider.seriesDetail;
             final recommendations = provider.listRecomendations;
+            final isAddedToWatchlist = provider.isAddedToWatchlist;
             return SafeArea(
-              child: DetailContent(tvSeries,recommendations),
+              child:
+                  DetailContent(tvSeries, recommendations, isAddedToWatchlist),
             );
           } else {
             return Text(provider.message);
@@ -57,7 +61,8 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
 class DetailContent extends StatelessWidget {
   final TvSeriesDetail tvSeries;
   final List<TvSeries> recommendations;
-  DetailContent(this.tvSeries, this.recommendations);
+  final bool isAddedtoWatchlist;
+  DetailContent(this.tvSeries, this.recommendations, this.isAddedtoWatchlist);
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +105,47 @@ class DetailContent extends StatelessWidget {
                               style: kHeading5,
                             ),
                             ElevatedButton(
-                              onPressed: () async {},
+                              onPressed: () async {
+                                if (isAddedtoWatchlist) {
+                                  await context
+                                      .read<TvSeriesDetailNotifier>()
+                                      .removeFromWatchlist(tvSeries);
+                                } else {
+                                  await context
+                                      .read<TvSeriesDetailNotifier>()
+                                      .addToWatchlist(tvSeries);
+                                }
+
+                                final message =
+                                    Provider.of<TvSeriesDetailNotifier>(context,
+                                            listen: false)
+                                        .watchListMessage;
+
+                                if (message ==
+                                        TvSeriesDetailNotifier
+                                            .watchlistAddSuccessMessage ||
+                                    message ==
+                                        TvSeriesDetailNotifier
+                                            .watchlistRemoveSuccessMessage) {
+                                  ScaffoldMessengerState().hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(message)));
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text(message),
+                                        );
+                                      });
+                                }
+                              },
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(Icons.add),
+                                  Icon(isAddedtoWatchlist
+                                      ? Icons.check
+                                      : Icons.add),
                                   Text('Watchlist'),
                                 ],
                               ),
@@ -112,7 +153,6 @@ class DetailContent extends StatelessWidget {
                             Text(
                               _showGenres(tvSeries.genres),
                             ),
-                          
                             Row(
                               children: [
                                 RatingBarIndicator(
@@ -140,13 +180,15 @@ class DetailContent extends StatelessWidget {
                               'Season',
                               style: kHeading6,
                             ),
-                            SizedBox(height: 16,),
-                              Column(
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Column(
                               children: tvSeries.seasons.map((season) {
                                 return SeasonCardList(season: season);
                               }).toList(),
                             ),
-                             SizedBox(height: 16),
+                            SizedBox(height: 16),
                             Text(
                               'Recommendations',
                               style: kHeading6,

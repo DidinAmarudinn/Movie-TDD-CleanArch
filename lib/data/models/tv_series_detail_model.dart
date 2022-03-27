@@ -1,9 +1,10 @@
 import 'package:ditonton/data/models/genre_model.dart';
 import 'package:ditonton/data/models/season_model.dart';
+import 'package:equatable/equatable.dart';
 
 import '../../domain/entities/tv_series_detail.dart';
 
-class TvSeriesDetailModel {
+class TvSeriesDetailModel extends Equatable {
   TvSeriesDetailModel({
     required this.adult,
     required this.backdropPath,
@@ -56,7 +57,8 @@ class TvSeriesDetailModel {
   final double voteAverage;
   final int voteCount;
 
-  factory TvSeriesDetailModel.fromJson(Map<String, dynamic> json) => TvSeriesDetailModel(
+  factory TvSeriesDetailModel.fromJson(Map<String, dynamic> json) =>
+      TvSeriesDetailModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         episodeRunTime: List<int>.from(json["episode_run_time"].map((x) => x)),
@@ -138,4 +140,32 @@ class TvSeriesDetailModel {
         voteAverage: voteAverage,
         voteCount: voteCount,
       );
+
+  @override
+  List<Object?> get props => [
+        adult,
+        backdropPath,
+        episodeRunTime,
+        firstAirDate,
+        genres,
+        homepage,
+        id,
+        inProduction,
+        languages,
+        lastAirDate,
+        name,
+        numberOfEpisodes,
+        numberOfSeasons,
+        originalLanguage,
+        originalName,
+        overview,
+        popularity,
+        posterPath,
+        seasons,
+        status,
+        tagline,
+        type,
+        voteAverage,
+        voteCount
+      ];
 }
