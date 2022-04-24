@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:sqflite/sqflite.dart';
+import 'package:core/common/encrypt.dart';
+import 'package:sqflite_sqlcipher/sqflite.dart';
 
 import '../../models/movie_table.dart';
 import '../../models/tv_series_table.dart';
@@ -28,7 +29,14 @@ class DatabaseHelper {
     final path = await getDatabasesPath();
     final databasePath = '$path/ditonton.db';
 
-    var db = await openDatabase(databasePath, version: 1, onCreate: _onCreate);
+    var db = await openDatabase(
+      databasePath,
+      version: 1,
+      onCreate: _onCreate,
+      password: encrypt(
+        "password for my database",
+      ),
+    );
     return db;
   }
 
@@ -121,12 +129,13 @@ class DatabaseHelper {
     );
   }
 
-  Future<Map<String,dynamic>?> getTvSeriesById(int id) async{
+  Future<Map<String, dynamic>?> getTvSeriesById(int id) async {
     final db = await database;
-    final result = await db!.query(_tblTvSeriesWatchlist, where: 'id = ?', whereArgs: [id]);
-    if(result.isNotEmpty){
+    final result = await db!
+        .query(_tblTvSeriesWatchlist, where: 'id = ?', whereArgs: [id]);
+    if (result.isNotEmpty) {
       return result.first;
-    }else{
+    } else {
       return null;
     }
   }
@@ -153,9 +162,10 @@ class DatabaseHelper {
     return results;
   }
 
-   Future<List<Map<String, dynamic>>> getTvSeriesWatchlist() async {
+  Future<List<Map<String, dynamic>>> getTvSeriesWatchlist() async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_tblTvSeriesWatchlist);
+    final List<Map<String, dynamic>> results =
+        await db!.query(_tblTvSeriesWatchlist);
     return results;
   }
 }

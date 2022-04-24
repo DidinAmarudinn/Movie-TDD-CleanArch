@@ -39,6 +39,7 @@ import 'package:core/presentation/provider/watchlist_tv_series_notifier.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_it/get_it.dart';
+import 'package:search/presentation/bloc/search_bloc.dart';
 import 'package:search/search.dart';
 
 final locator = GetIt.instance;
@@ -76,6 +77,13 @@ void init() {
       getTopRatedMovies: locator(),
     ),
   );
+
+  locator.registerFactory(
+    () => SearchBloc(
+      locator(),
+    ),
+  );
+
   locator.registerFactory(
     () => WatchlistMovieNotifier(
       getWatchlistMovies: locator(),
