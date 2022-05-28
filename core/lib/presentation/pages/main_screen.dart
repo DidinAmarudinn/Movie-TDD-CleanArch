@@ -3,6 +3,7 @@ import 'package:core/presentation/pages/home_movie_page.dart';
 import 'package:core/presentation/pages/tv_series_page.dart';
 import 'package:core/presentation/pages/watchlist_page.dart';
 import 'package:core/utils/routest.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import '../../core.dart';
@@ -81,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             onPressed: () {
+              // FirebaseCrashlytics.instance.crash();
               Navigator.pushNamed(context, SEARCH_ROUTE, arguments: selectedIndex == 0? true: false);
             },
             icon:const Icon(Icons.search),

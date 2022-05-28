@@ -26,7 +26,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(""));
     } on SocketException {
       return Left(ConnectionFailure("failed connect to the network"));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override
@@ -38,7 +40,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(""));
     } on SocketException {
       return Left(ConnectionFailure("failed connect to the network"));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override
@@ -50,7 +54,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(""));
     } on SocketException {
       return Left(ConnectionFailure("failed connect to the network"));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override
@@ -62,7 +68,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(''));
     } on SocketException {
       return Left(ConnectionFailure('failed connect to the network'));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override
@@ -74,7 +82,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(""));
     } on SocketException {
       return Left(ConnectionFailure('failed connect to the network'));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override
@@ -87,7 +97,9 @@ class TvSeriesRepositoryImpl extends TvSeriesRepository {
       return Left(ServerFailure(''));
     } on SocketException {
       return Left(ConnectionFailure("failed connect to the network"));
-    }
+    } on TlsException {
+        return Left(SSLFailure("certificated verify failed"));
+      }
   }
 
   @override

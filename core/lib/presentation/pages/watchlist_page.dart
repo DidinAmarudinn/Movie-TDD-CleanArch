@@ -1,13 +1,14 @@
-
+import 'package:core/presentation/bloc/watchlist_movie_bloc/watchlist_movie_bloc.dart';
+import 'package:core/presentation/bloc/watchlist_tv_series_bloc/watchlist_tv_series_bloc.dart';
 import 'package:core/presentation/pages/watchlist_movies_page.dart';
 import 'package:core/presentation/pages/watchlist_tv_series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../core.dart';
 import '../provider/watchlist_movie_notifier.dart';
 import '../provider/watchlist_tv_series_notifier.dart';
-
 
 class WatchlistPage extends StatefulWidget {
   static const ROUTE_NAME = '/watchlist';
@@ -25,10 +26,10 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
     super.initState();
     pageController = PageController(keepPage: true, initialPage: selectedIndex);
     Future.microtask(() {
-      Provider.of<WatchlistMovieNotifier>(context, listen: false)
-          .fetchWatchlistMovies();
-      Provider.of<WatchlistTvSeriesNotifier>(context, listen: false)
-          .fetchWatchlistTvSeries();
+      BlocProvider.of<WatchlistMovieBloc>(context)
+          .add(const WatchlistMovieEvent());
+      BlocProvider.of<WatchlistTvSeriesBloc>(context)
+          .add(const WatchlistTvSeriesEvent());
     });
   }
 
@@ -39,17 +40,17 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
   }
 
   void didPopNext() {
-    Provider.of<WatchlistMovieNotifier>(context, listen: false)
-        .fetchWatchlistMovies();
-    Provider.of<WatchlistTvSeriesNotifier>(context, listen: false)
-        .fetchWatchlistTvSeries();
+    BlocProvider.of<WatchlistMovieBloc>(context)
+        .add(const WatchlistMovieEvent());
+    BlocProvider.of<WatchlistTvSeriesBloc>(context)
+        .add(const WatchlistTvSeriesEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:const Text('Watchlist'),
+        title: const Text('Watchlist'),
       ),
       body: Column(
         children: [
@@ -69,7 +70,7 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
                           .withOpacity(selectedIndex == 0 ? 1 : 0.4)),
                 ),
               ),
-            const  SizedBox(
+              const SizedBox(
                 width: kDefaultPadding / 2,
               ),
               TextButton(
@@ -91,8 +92,8 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
           Expanded(
               child: PageView(
             controller: pageController,
-            physics:const NeverScrollableScrollPhysics(),
-            children:const [WatchlistMoviePage(), WatchlistTvSeriesPage()],
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [WatchlistMoviePage(), WatchlistTvSeriesPage()],
           ))
         ],
       ),
